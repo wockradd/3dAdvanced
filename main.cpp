@@ -19,8 +19,9 @@
 
 /*
     TODO
-    get rid of legacy stuff
-    clean up
+    vertex array buffer instead of glbegin
+    glm lookat and perspective instead of glut 
+    make sure depth buffer is working, try having one white cart and one red, one in front of the other
     mouse movements
     lighting / shading
     textures
@@ -39,22 +40,24 @@ glm::vec3 cameraUp(0,1,0);
 
 
 void display(){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//clear the screen
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//clear the buffers
     
+    //project
     glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(45.0f, (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 1000.0f);
 
-	// Get Back to the Modelview
+	
+    //camera postioning
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-   
+
+    //do this instead
     glm::vec3 c = cameraForward + cameraPos;
-    gluLookAt(
-        cameraPos.x,cameraPos.y,cameraPos.z,
-        c.x,c.y,c.z,
-        cameraUp.x, cameraUp.y, cameraUp.z
-    );
+    gluLookAt(cameraPos.x,cameraPos.y,cameraPos.z,c.x, c.y, c.z, cameraUp.x, cameraUp.y, cameraUp.z);
+
+
+    //drawing
     for(auto tri : myMesh.tris){
         glBegin(GL_POLYGON);
 		glVertex3f(tri.v1.x,tri.v1.y,tri.v1.z);
@@ -64,8 +67,7 @@ void display(){
     }
 	
     
-
-    glutSwapBuffers();//not sure
+    glutSwapBuffers();
 }
 
 
