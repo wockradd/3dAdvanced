@@ -19,9 +19,6 @@
 
 /*
     TODO
-    vertex array buffer instead of glbegin
-    glm lookat and perspective instead of glut 
-    make sure depth buffer is working, try having one white cart and one red, one in front of the other
     mouse movements
     lighting / shading
     textures
@@ -32,11 +29,22 @@
 
 //global variables
 Mesh myMesh;
-glm::vec3 cameraPos(0,0,6);
+glm::vec3 cameraPos(0,1,6);
 glm::vec3 cameraForward(0,0,-1);
 glm::vec3 cameraUp(0,1,0);
 
 
+void draw(float r, float g, float b){
+    glColor3f(r,g,b);
+    //drawing
+    for(auto tri : myMesh.tris){
+        glBegin(GL_POLYGON);
+		glVertex3f(tri.v1.x,tri.v1.y,tri.v1.z);
+		glVertex3f(tri.v2.x,tri.v2.y,tri.v2.z);
+		glVertex3f(tri.v3.x,tri.v3.y,tri.v3.z);
+	    glEnd();
+    }
+}
 
 
 void display(){
@@ -56,19 +64,29 @@ void display(){
     glm::vec3 c = cameraForward + cameraPos;
     gluLookAt(cameraPos.x,cameraPos.y,cameraPos.z,c.x, c.y, c.z, cameraUp.x, cameraUp.y, cameraUp.z);
 
-
-    //drawing
-    for(auto tri : myMesh.tris){
-        glBegin(GL_POLYGON);
-		glVertex3f(tri.v1.x,tri.v1.y,tri.v1.z);
-		glVertex3f(tri.v2.x,tri.v2.y,tri.v2.z);
-		glVertex3f(tri.v3.x,tri.v3.y,tri.v3.z);
-	    glEnd();
-    }
+    glColor3f(1,1,1);
+    glBegin(GL_QUADS);
+        glVertex3f(5,0,5);
+        glVertex3f(5,0,-5);
+        glVertex3f(-5,0,-5);
+        glVertex3f(-5,0,5);
+    glEnd();
+	draw(1,0,0);
+    glPushMatrix();
+			glTranslatef(0,0,-2);
+			draw(0,1,0);
+	glPopMatrix();
+     glPushMatrix();
+			glTranslatef(1,0,0.0);
+			draw(0,0,1);
+	glPopMatrix();
+    
 	
     
     glutSwapBuffers();
 }
+
+
 
 
 
@@ -87,14 +105,13 @@ void init(){
 int main(int argc, char** argv){
     glutInit(&argc, argv);
     init();
-    
+   
     
     glutDisplayFunc(display);
     glViewport(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
     glutKeyboardFunc(buttons);
     glutMouseFunc(mouse);
     glEnable(GL_DEPTH_TEST);
-    
     glutMainLoop();
     return 0;
 }
