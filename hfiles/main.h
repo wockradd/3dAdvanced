@@ -12,14 +12,21 @@ struct Tri{
     glm::vec3 v3;
 };
 
-struct Mesh{
-    vector<Tri> tris;
+class Mesh{
+    public:
+        vector<Tri> tris;
+        float r,g,b;
+        void updateColor(float newR, float newG, float newB){
+            r = newR;
+            g = newG;
+            b = newB;
+        }
 };
 
 
 
 
-extern Mesh myMesh;
+
 extern glm::vec3 cameraPos, cameraForward, cameraUp;
 
 

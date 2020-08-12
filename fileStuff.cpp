@@ -1,19 +1,20 @@
 #include "./hfiles/fileStuff.h"
 #include "./hfiles/main.h"
 #include <iostream>
+#include <string>
 #include <sstream>
 #include <fstream>
 #include <glm/glm.hpp>
 using namespace std;
 
-struct Mesh generateMeshFromFile(){
+struct Mesh generateMeshFromFile(string fileName){
     Mesh m = Mesh();//final mesh we're gonna return
     vector<glm::vec3> tempVec;
 
     //reading file stuff
     string line;
     ifstream myfile; 
-    myfile.open("./resources/cart.obj");
+    myfile.open(fileName);
 
     if (myfile.is_open()){
         while (getline(myfile,line)){//read line by line

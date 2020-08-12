@@ -1,1 +1,2 @@
-struct Mesh generateMeshFromFile();
+#include <string>
+struct Mesh generateMeshFromFile(std::string fileName);
