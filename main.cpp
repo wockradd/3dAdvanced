@@ -26,13 +26,9 @@
 
 //global variables
 Mesh cartMesh,cubeMesh,lightMesh,benchMesh,treeMesh,windmillMesh;
-glm::vec3 cameraPos(0,1,6);
+glm::vec3 cameraPos(0,1,0);
 glm::vec3 cameraForward(0,0,-1);
 glm::vec3 cameraUp(0,1,0);
-
-float x = 0.001;
-glm::mat4 Identity = glm::mat4(1);
-
 
 float windmillAngle = 0.0;
 
@@ -67,12 +63,6 @@ void display(){
     //camera postioning
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glm::vec4 test = {cameraForward.x, cameraForward.y, cameraForward.z,1};
-    glm::mat4 rc = glm::rotate(Identity,x,glm::vec3{1,0,0});
-    test = rc*test;
-    cameraForward.x = test.x;
-    cameraForward.y = test.y;
-    cameraForward.z = test.z;
     glm::vec3 c = cameraForward + cameraPos;
     gluLookAt(cameraPos.x,cameraPos.y,cameraPos.z,c.x, c.y, c.z, cameraUp.x, cameraUp.y, cameraUp.z);
 
@@ -85,39 +75,50 @@ void display(){
         glVertex3f(-5,0,-5);
         glVertex3f(-5,0,5);
     glEnd();
-	draw(lightMesh);
-    glPushMatrix();
-			glTranslatef(0,0,-4);
-			draw(treeMesh);
-            glTranslatef(1,0,0);
-			draw(treeMesh);
-            glTranslatef(1,0,0);
-			draw(treeMesh);
+	glPushMatrix();
+		glTranslatef(0,0,4);
+		draw(lightMesh);
 	glPopMatrix();
-     glPushMatrix();
-			glTranslatef(-4,0,-4);
-            glRotatef(-45,0,1,0);
-			draw(cubeMesh);
-            glTranslatef(0,1,0);
-            draw(cubeMesh);
-            glTranslatef(0,1,0);
-            draw(cubeMesh);
-            glTranslatef(0.6,0.5,0);
-            glRotatef(-windmillAngle,1,0,0);
-            draw(windmillMesh);
-	glPopMatrix();
-
     glPushMatrix();
-			glTranslatef(3,0,0);
-            glRotatef(30,0,1,0);
-			draw(cartMesh);
+		glTranslatef(0,0,-4);
+		draw(treeMesh);
+        glTranslatef(1,0,0);
+		draw(treeMesh);
+        glTranslatef(1,0,0);
+		draw(treeMesh);
 	glPopMatrix();
-
     glPushMatrix();
-			glTranslatef(-3,0,0);
-			draw(benchMesh);
-            glTranslatef(0,0,2);
-			draw(benchMesh);
+		glTranslatef(-4,0,-4);
+        glRotatef(-45,0,1,0);
+		draw(cubeMesh);
+        glTranslatef(0,1,0);
+        draw(cubeMesh);
+        glTranslatef(0,1,0);
+        draw(cubeMesh);
+        glTranslatef(0.6,0.5,0);
+        glRotatef(-windmillAngle,1,0,0);
+        draw(windmillMesh);
+	glPopMatrix();
+    glPushMatrix();
+		glTranslatef(3,0,0);
+        cartMesh.updateColor(1,0,0);
+        draw(cartMesh);
+        glTranslatef(0,0,3);
+        glRotatef(-30,0,1,0);
+        cartMesh.updateColor(0,0,1);
+        draw(cartMesh);
+	glPopMatrix();
+    glPushMatrix();
+        glTranslatef(3,0.1,-3);
+        glRotatef(30,1,1,0);
+        cartMesh.updateColor(0,0,1);
+        draw(cartMesh);
+    glPopMatrix();
+    glPushMatrix();
+		glTranslatef(-3,0,0);
+		draw(benchMesh);
+        glTranslatef(0,0,2);
+		draw(benchMesh);
 	glPopMatrix();
     
     if(windmillAngle >= 360){
@@ -126,7 +127,6 @@ void display(){
         windmillAngle+=0.05;
     }
     
-
     glutPostRedisplay();//force it to redraw, just so the windmill spins
     glutSwapBuffers();
 }
@@ -167,7 +167,6 @@ int main(int argc, char** argv){
     glutDisplayFunc(display);
     glViewport(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
     glutKeyboardFunc(buttons);
-    glutMouseFunc(mouse);
     glEnable(GL_DEPTH_TEST);
     glutMainLoop();
     return 0;
