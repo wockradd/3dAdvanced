@@ -16,11 +16,11 @@ struct Tri{
 class Mesh{
     public:
         vector<Tri> tris;
-        float r,g,b;
+        glm::vec3 color;
         void updateColor(float newR, float newG, float newB){
-            r = newR;
-            g = newG;
-            b = newB;
+            color.x = newR;
+            color.y = newG;
+            color.z = newB;
         }
 };
 

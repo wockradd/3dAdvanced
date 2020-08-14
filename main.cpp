@@ -13,29 +13,27 @@
 
 
 
-
-
-/*
-    TODO
-    lighting
-*/
-
-
-
-
 //global variables
 Mesh cartMesh,cubeMesh,lightMesh,benchMesh,treeMesh,windmillMesh;
 glm::vec3 cameraPos(0,1,0);
 glm::vec3 cameraForward(0,0,-1);
 glm::vec3 cameraUp(0,1,0);
 
+glm::vec3 lightPos(5.0,5.0,0);
+float ambientLight = 0.1;
+
 float windmillAngle = 0.0;
 
 
 
 void draw(Mesh m){
-    glColor3f(m.r,m.g,m.b);
     for(auto tri : m.tris){
+        glm::vec3 ambient = m.color * ambientLight;
+        float diff = max(glm::dot(tri.normal,glm::normalize(lightPos)),0.0f);
+        glm::vec3 diffuse = m.color*diff;
+        glm::vec3 result = (ambient + diffuse) * m.color;
+
+        glColor3f(result.x,result.y,result.z);
         glBegin(GL_POLYGON);
 		glVertex3f(tri.v1.x,tri.v1.y,tri.v1.z);
 		glVertex3f(tri.v2.x,tri.v2.y,tri.v2.z);
@@ -73,6 +71,9 @@ void display(){
         glVertex3f(-5,0,-5);
         glVertex3f(-5,0,5);
     glEnd();
+
+		
+
 	glPushMatrix();
 		glTranslatef(0,0,4);
 		draw(lightMesh);
@@ -142,7 +143,7 @@ void init(){
     benchMesh = generateMeshFromFile("./resources/bench.obj");
     windmillMesh = generateMeshFromFile("./resources/propellor.obj");
 
-    cubeMesh.updateColor(0,1,0);
+    cubeMesh.updateColor(0.0,1,0.0);
     cartMesh.updateColor(1,0,0);
     treeMesh.updateColor(0,1,0);
     lightMesh.updateColor(1,1,1);
