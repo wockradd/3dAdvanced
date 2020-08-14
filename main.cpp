@@ -17,7 +17,6 @@
 
 /*
     TODO
-    mouse movements
     lighting
 */
 
@@ -36,7 +35,6 @@ float windmillAngle = 0.0;
 
 void draw(Mesh m){
     glColor3f(m.r,m.g,m.b);
-    //drawing
     for(auto tri : m.tris){
         glBegin(GL_POLYGON);
 		glVertex3f(tri.v1.x,tri.v1.y,tri.v1.z);
@@ -137,15 +135,15 @@ void display(){
 
 void init(){
     
-    cartMesh = generateMeshFromFile("./resources/cart.obj");
     cubeMesh = generateMeshFromFile("./resources/cube.obj");
+    cartMesh = generateMeshFromFile("./resources/cart.obj");
     treeMesh = generateMeshFromFile("./resources/tree.obj");
     lightMesh = generateMeshFromFile("./resources/light.obj");
     benchMesh = generateMeshFromFile("./resources/bench.obj");
     windmillMesh = generateMeshFromFile("./resources/propellor.obj");
 
-    cartMesh.updateColor(1,0,0);
     cubeMesh.updateColor(0,1,0);
+    cartMesh.updateColor(1,0,0);
     treeMesh.updateColor(0,1,0);
     lightMesh.updateColor(1,1,1);
     benchMesh.updateColor(0,0,1);

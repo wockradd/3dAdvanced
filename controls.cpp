@@ -5,14 +5,13 @@
 #include <iostream>
 
 
-//camera rotation is really gross but it works so meh, idk anymore
+//camera rotation, a and d, is really gross but it works so meh, idk anymore
 float yAngle = 0.05;
 glm::mat4 Identity = glm::mat4(1);
 glm::mat4 rotateYClockwise = glm::rotate(Identity,yAngle,glm::vec3{0,-1,0});
 glm::mat4 rotateYCounterClockwise = glm::rotate(Identity,yAngle,glm::vec3{0,1,0});
 
 void buttons(unsigned char key, int x, int y){
-    glm::vec3 cameraRight = glm::cross(cameraUp, cameraForward);
     switch(key){
         case 'd':
             {

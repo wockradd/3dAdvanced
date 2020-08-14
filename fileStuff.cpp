@@ -10,6 +10,7 @@ using namespace std;
 struct Mesh generateMeshFromFile(string fileName){
     Mesh m = Mesh();//final mesh we're gonna return
     vector<glm::vec3> tempVec;
+    vector<glm::vec3> tempNormals;
 
     //reading file stuff
     string line;
@@ -19,29 +20,57 @@ struct Mesh generateMeshFromFile(string fileName){
     if (myfile.is_open()){
         while (getline(myfile,line)){//read line by line
             stringstream ss;
-            char junk;
+            string junk;
             float x, y ,z;
+            string f1,f2,f3;
 
-            if(line[0] == 'v'){
+            if(line[0] == 'v'){//vectors
+                ss << line;               
+                ss >> junk >> x >> y >> z;
+                glm::vec3 v(x,y,z);       
                 
-                ss << line;               //send the string to the stream
-                ss >> junk >> x >> y >> z;//use the stream to initialize the variables
-
-                glm::vec3 v(x,y,z);
-
-                tempVec.push_back(v); //add to list
+                if(line[1]=='n'){ //normal
+                    cout << line << " normal\n";
+                    tempNormals.push_back(v); 
+                }else if(line[1]=='t'){//texture, do nothing
+                    
+                }else{//vector
+                    tempVec.push_back(v); 
+                    cout << line << " vector\n";
+                }
+                
+                
             }
 
-            if(line[0] =='f'){
-                Tri t = Tri();            //create a new tri
-                ss << line;               //turn the string into a stream
-                ss >> junk >> x >> y >> z;//use the stream to initialize the variables
+            if(line[0] =='f'){//faces
+                Tri t = Tri(); 
+                int splitPos, vectorIndex;          
 
-                t.v1 = tempVec[x-1];
-                t.v2 = tempVec[y-1]; //create new tri
-                t.v3 = tempVec[z-1];
+                ss << line;     
+                ss >> junk >> f1 >> f2 >> f3;
 
-                m.tris.push_back(t);//add to list
+
+                //deal with f1
+                splitPos = f1.find("/");
+                vectorIndex = stoi(f1.substr(0,splitPos));
+                t.v1 = tempVec[vectorIndex-1];
+                f1 = f1.substr(splitPos+1,f1.size());
+                splitPos = f1.find("/");
+                vectorIndex = stoi(f1.substr(splitPos+1,f1.size()));
+                t.normal = tempNormals[vectorIndex-1];
+
+                //deal with f2
+                splitPos = f2.find("/");
+                vectorIndex = stoi(f2.substr(0,splitPos));
+                t.v2 = tempVec[vectorIndex-1];
+
+                //deal with f3
+                splitPos = f3.find("/");
+                vectorIndex = stoi(f3.substr(0,splitPos));
+                t.v3 = tempVec[vectorIndex-1];
+
+                //add tri to list
+                m.tris.push_back(t);
             } 
         }
     myfile.close();
